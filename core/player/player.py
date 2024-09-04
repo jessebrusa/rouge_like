@@ -94,14 +94,44 @@ class Player:
         pygame.draw.circle(screen, (255, 0, 0), (self.x, self.y), self.radius, 2)  # Red color with a thickness of 2
 
         # Draw the bounding rectangles around the syringes with an additional 20-degree offset
-        self.draw_rotated_rect(screen, syringe_left_pos, syringe_left_width, syringe_left_height, self.direction_dict[self.direction])
-        self.draw_rotated_rect(screen, syringe_right_pos, syringe_right_width - 50, syringe_right_height, self.direction_dict[self.direction])
+        self.draw_rotated_rect(screen, syringe_left_pos, syringe_left_width - 50, 
+                               syringe_left_height, self.direction_dict[self.direction] - 20, 'left')
+        self.draw_rotated_rect(screen, syringe_right_pos, syringe_right_width - 50, 
+                               syringe_right_height, self.direction_dict[self.direction] + 20, 'right')
+    
+    def draw_rotated_rect(self, screen, pos, width, height, angle, side):
+        if self.direction in ["down"]:
+            if side == "left":
+                angle = angle + 220
+            if side == "right":
+                angle = angle - 220
 
-    def draw_rotated_rect(self, screen, pos, width, height, angle):
-        rect = pygame.Rect(pos[0], pos[1], width, height)
-        rotated_image = pygame.transform.rotate(pygame.Surface((width, height), pygame.SRCALPHA), angle)
-        rotated_rect = rotated_image.get_rect(center=rect.center)
-        pygame.draw.rect(screen, (0, 255, 0), rotated_rect, 2)  # Green color with a thickness of 2
+        if self.direction in ["down_right"]:
+            if side == "left":
+                angle = angle + 220
+            if side == "right":
+                angle = angle - 220
+
+        if self.direction in ["down_left"]:
+            if side == "left":
+                angle = angle + 220
+            if side == "right":
+                angle = angle - 220
+    
+        # Create a surface with the desired width and height
+        rect_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        
+        # Draw the rectangle on this surface
+        pygame.draw.rect(rect_surface, (0, 255, 0), (0, 0, width, height), 2)  # Green color with a thickness of 2
+        
+        # Rotate the surface
+        rotated_image = pygame.transform.rotate(rect_surface, angle)
+        
+        # Get the rotated surface's rect and set its center to the original rect's center
+        rotated_rect = rotated_image.get_rect(center=(pos[0] + width // 2 + 25, pos[1] + height // 2))
+        
+        # Blit the rotated surface onto the screen
+        screen.blit(rotated_image, rotated_rect.topleft)
 
     def update(self):
         keys = pygame.key.get_pressed()
