@@ -1,0 +1,41 @@
+"OPERATION: BELIEVE In The SCIENCE OR ELSE"
+
+1. main loop with intro and play again
+    - setup screen
+    - function main loop
+    - function gamestate
+    - intro text and start
+    - game over with play again/quit
+
+2. room
+    - different walls randomly generated
+    - levels progress more traps
+
+3. player - "Tony Grouchi"
+    - movement
+    - weapon animation
+    - vaccine is weapon
+    - masks are defense
+    - masks can be thrown causing damage and weakens enemies
+
+4. enemies
+    - movement
+    - animation
+
+5. update and draw
+    - aggregate all sprites
+
+6. collisions
+    - border
+    - player vs enemy
+
+7. classes to be used by all
+    - Health Bars
+    - speech bubble
+
+8. level
+    - amount of enemies per wave
+    - health of enemies and damage they do
+
+9. score
+    - enemy scores total - time
