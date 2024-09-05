@@ -22,6 +22,32 @@ class CollisionHandler:
             if not any(side == 'bottom' and pos <= player.x <= pos + room.opening_size for side, pos in room.openings):
                 player.y = SCREEN_HEIGHT - room.thickness - player.radius
 
+        # if player.rect_left.left < room.thickness:
+        #     if not any(side == 'left' and pos <= player.y <= pos + room.opening_size for side, pos in room.openings):
+        #         player.rect_left.left = room.thickness
+        # if player.rect_left.right > SCREEN_WIDTH - room.thickness:
+        #     if not any(side == 'right' and pos <= player.y <= pos + room.opening_size for side, pos in room.openings):
+        #         player.rect_left.right = SCREEN_WIDTH - room.thickness
+        # if player.rect_left.top < room.thickness:
+        #     if not any(side == 'top' and pos <= player.x <= pos + room.opening_size for side, pos in room.openings):
+        #         player.rect_left.top = room.thickness
+        # if player.rect_left.bottom > SCREEN_HEIGHT - room.thickness:
+        #     if not any(side == 'bottom' and pos <= player.x <= pos + room.opening_size for side, pos in room.openings):
+        #         player.rect_left.bottom = SCREEN_HEIGHT - room.thickness
+
+        # if player.rect_right.left < room.thickness:
+        #     if not any(side == 'left' and pos <= player.y <= pos + room.opening_size for side, pos in room.openings):
+        #         player.rect_right.left = room.thickness
+        # if player.rect_right.right > SCREEN_WIDTH - room.thickness:
+        #     if not any(side == 'right' and pos <= player.y <= pos + room.opening_size for side, pos in room.openings):
+        #         player.rect_right.right = SCREEN_WIDTH - room.thickness
+        # if player.rect_right.top < room.thickness:
+        #     if not any(side == 'top' and pos <= player.x <= pos + room.opening_size for side, pos in room.openings):
+        #         player.rect_right.top = room.thickness
+        # if player.rect_right.bottom > SCREEN_HEIGHT - room.thickness:
+        #     if not any(side == 'bottom' and pos <= player.x <= pos + room.opening_size for side, pos in room.openings):
+        #         player.rect_right.bottom = SCREEN_HEIGHT - room.thickness
+
     def check_player_off_screen(self, player: Player, room: Room):
         if player.is_off_screen():
             for side, pos in room.openings:
