@@ -8,7 +8,7 @@ from core.player.syringe import Syringe
 
 RADIUS = 20
 COLOR = GREY
-SPEED = 5
+PLAYER_SPEED = 5
 
 class Player:
     def __init__(self):
@@ -16,23 +16,11 @@ class Player:
         self.y = SCREEN_HEIGHT // 2
         self.radius = RADIUS
         self.color = COLOR
-        self.speed = SPEED
+        self.speed = PLAYER_SPEED
         self.direction = "up"
         self.last_shot_time = 0
         self.shoot_interval = 0.25
         self.syringes = []
-
-        self.direction_dict = {
-            "up": 0,
-            "down": 180,
-            "right": 270,
-            "left": 90,
-            "up_right": 315,
-            "up_left": 45,
-            "down_right": 225,
-            "down_left": 135
-        }
-
     
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)

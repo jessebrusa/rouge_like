@@ -4,6 +4,7 @@ from data.settings import *
 
 SYRINGE_URL = os.path.join(ROOT_DIR, "assets", "img", "syringe.png")
 SYRINGE_SCALE = 5
+SYRINGE_SPEED = 10
 
 class Syringe:
     def __init__(self, x, y, direction):
@@ -17,19 +18,9 @@ class Syringe:
                                             (self.image.get_width() // SYRINGE_SCALE, 
                                              self.image.get_height() // SYRINGE_SCALE))
         
-        self.speed = 10  # Adjust the speed as needed
+        self.speed = SYRINGE_SPEED 
         self.rect = self.image.get_rect(center=(self.x, self.y))
 
-        self.direction_dict = {
-            "up": 0,
-            "down": 180,
-            "right": 270,
-            "left": 90,
-            "up_right": 315,
-            "up_left": 45,
-            "down_right": 225,
-            "down_left": 135
-        }
 
     def update(self):
         if self.direction == "up":
@@ -54,7 +45,7 @@ class Syringe:
             self.y += self.speed
 
         # Rotate the image
-        rotate_angle = self.direction_dict[self.direction]
+        rotate_angle = DIRECTION_DICT[self.direction]
         self.rotated_image = pygame.transform.rotate(self.image, rotate_angle)
         self.rect = self.rotated_image.get_rect(center=(self.x, self.y))
 

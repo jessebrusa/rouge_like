@@ -16,3 +16,14 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREY = (128, 128, 128)
 BLUE = (0, 0, 255)  
+
+DIRECTION_DICT = {
+            "up": 0,
+            "down": 180,
+            "right": 270,
+            "left": 90,
+            "up_right": 315,
+            "up_left": 45,
+            "down_right": 225,
+            "down_left": 135
+        }
