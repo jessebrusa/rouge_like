@@ -1,16 +1,14 @@
 import pygame
 import os
+import time
+
 from data.settings import *
 
-SYRINGE_URL = os.path.join(ROOT_DIR, "assets", "img", "syringe.png")
+from core.player.syringe import Syringe
 
 RADIUS = 20
 COLOR = GREY
 SPEED = 5
-
-SYRINGE_SCALE = 3
-SYRING_ROTATION = 20
-SYRING_OFFSET = 10
 
 class Player:
     def __init__(self):
@@ -20,7 +18,10 @@ class Player:
         self.color = COLOR
         self.speed = SPEED
         self.direction = "up"
-        
+        self.last_shot_time = 0
+        self.shoot_interval = 0.25
+        self.syringes = []
+
         self.direction_dict = {
             "up": 0,
             "down": 180,
@@ -32,45 +33,62 @@ class Player:
             "down_left": 135
         }
 
-
+    
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
 
-        # Draw the bounding circle around the player
-        pygame.draw.circle(screen, (255, 0, 0), (self.x, self.y), self.radius, 2)  # Red color with a thickness of 2
+        # Draw syringes
+        for syringe in self.syringes:
+            syringe.draw(screen)
 
+
+    def shoot_syringe(self):
+        current_time = time.time()
+        if current_time - self.last_shot_time >= self.shoot_interval:
+            self.last_shot_time = current_time
+            syringe = Syringe(self.x, self.y, self.direction)
+            self.syringes.append(syringe)
+            return syringe
+        return None
 
     def update(self):
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_LEFT] and keys[pygame.K_UP]:
+        if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and (keys[pygame.K_UP] or keys[pygame.K_w]):
             self.x -= self.speed
             self.y -= self.speed
             self.direction = "up_left"
-        elif keys[pygame.K_RIGHT] and keys[pygame.K_UP]:
+        elif (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and (keys[pygame.K_UP] or keys[pygame.K_w]):
             self.x += self.speed
             self.y -= self.speed
             self.direction = "up_right"
-        elif keys[pygame.K_LEFT] and keys[pygame.K_DOWN]:
+        elif (keys[pygame.K_LEFT] or keys[pygame.K_a]) and (keys[pygame.K_DOWN] or keys[pygame.K_s]):
             self.x -= self.speed
             self.y += self.speed
             self.direction = "down_left"
-        elif keys[pygame.K_RIGHT] and keys[pygame.K_DOWN]:
+        elif (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and (keys[pygame.K_DOWN] or keys[pygame.K_s]):
             self.x += self.speed
             self.y += self.speed
             self.direction = "down_right"
-        elif keys[pygame.K_LEFT]:
+        elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.x -= self.speed
             self.direction = "left"
-        elif keys[pygame.K_RIGHT]:
+        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.x += self.speed
             self.direction = "right"
-        elif keys[pygame.K_UP]:
+        elif keys[pygame.K_UP] or keys[pygame.K_w]:
             self.y -= self.speed
             self.direction = "up"
-        elif keys[pygame.K_DOWN]:
+        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
             self.y += self.speed
             self.direction = "down"
-            
+
+        if keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
+            self.shoot_syringe()
+
+        # Update syringes
+        for syringe in self.syringes:
+            syringe.update()
+
     def is_off_screen(self):
         return self.x < 0 or self.x > SCREEN_WIDTH or self.y < 0 or self.y > SCREEN_HEIGHT
