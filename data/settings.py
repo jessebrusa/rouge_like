@@ -16,6 +16,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GREY = (128, 128, 128)
 BLUE = (0, 0, 255)  
+RED = (255, 0, 0)
+ORANGE = (255, 165, 0)  
 
 DIRECTION_DICT = {
             "up": 0,
@@ -27,3 +29,6 @@ DIRECTION_DICT = {
             "down_right": 225,
             "down_left": 135
         }
+
+WALL_THICKNESS = 10
+WALL_OPENING_SIZE = 150

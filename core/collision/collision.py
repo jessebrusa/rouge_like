@@ -29,6 +29,21 @@ class CollisionHandler:
                 player.syringes.remove(syringe)
 
 
+        # Check for door collisions
+        player_rect = pygame.Rect(player.x - player.radius, player.y - player.radius, player.radius * 2, player.radius * 2)
+        for door in room.doors:
+            if door.check_collision(player_rect):
+                if door.side == 'top':
+                    player.y = room.thickness + player.radius
+                elif door.side == 'bottom':
+                    player.y = SCREEN_HEIGHT - room.thickness - player.radius
+                elif door.side == 'left':
+                    player.x = room.thickness + player.radius
+                elif door.side == 'right':
+                    player.x = SCREEN_WIDTH - room.thickness - player
+              
+            
+
     def check_player_off_screen(self, player: Player, room: Room):
         if player.is_off_screen():
             for side, pos in room.openings:

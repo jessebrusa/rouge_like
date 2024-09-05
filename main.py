@@ -29,8 +29,9 @@ def intro_screen():
 
 def game_loop():
     running = True
+    room_counter = 1  # Initialize room counter
 
-    room = Room(screen)
+    room = Room(screen, room_counter)
     player = Player()
     collision_handler = CollisionHandler()  
 
@@ -44,6 +45,8 @@ def game_loop():
 
         # Update
         player.update()
+        for enemy in room.enemies:
+            enemy.update()
         collision_handler.check_player_room_collision(player, room)
 
         # Check if player moves off-screen through an opening
@@ -65,12 +68,13 @@ def game_loop():
                 player.y = SCREEN_HEIGHT - player.radius
                 player.x = pos + room.opening_size // 2
                 new_opening = ('top', pos)
-            room = Room(screen, fixed_opening=new_opening)
+            room_counter += 1  # Increment room counter
+            room = Room(screen, room_counter, fixed_opening=new_opening)
+
         
         # Draw
         room.draw()
         player.draw(screen)
-
 
         pygame.display.flip()
         clock.tick(FPS)

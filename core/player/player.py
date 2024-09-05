@@ -14,6 +14,7 @@ class Player:
     def __init__(self):
         self.x = SCREEN_WIDTH // 2
         self.y = SCREEN_HEIGHT // 2
+        self.rect = pygame.Rect(self.x - RADIUS, self.y - RADIUS, 2 * RADIUS, 2 * RADIUS)
         self.radius = RADIUS
         self.color = COLOR
         self.speed = PLAYER_SPEED
@@ -77,6 +78,9 @@ class Player:
         # Update syringes
         for syringe in self.syringes:
             syringe.update()
+
+    def update_rect(self):
+        self.rect.topleft = (self.x - self.radius, self.y - self.radius)
 
     def is_off_screen(self):
         return self.x < 0 or self.x > SCREEN_WIDTH or self.y < 0 or self.y > SCREEN_HEIGHT
