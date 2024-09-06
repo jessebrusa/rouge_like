@@ -71,6 +71,9 @@ def game_loop():
             room_counter += 1  # Increment room counter
             room = Room(screen, room_counter, fixed_opening=new_opening)
 
+        collision_handler.check_player_enemy_collision(player, room.enemies)
+        collision_handler.check_syringe_enemy_collision(player.syringes, room.enemies)
+
         
         # Draw
         room.draw()
