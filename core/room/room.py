@@ -19,6 +19,7 @@ class Room:
         self.openings = self.generate_openings(fixed_opening)
         self.enemies = self.generate_enemies(self.room_counter) 
         self.doors = self.create_doors()
+        self.door_opened = False  # Track if the door is opened
 
     def generate_openings(self, fixed_opening):
         openings = []
@@ -32,6 +33,15 @@ class Room:
                 openings.append(('bottom', pos))
             elif side == 'bottom':
                 openings.append(('top', pos))
+        else:
+            # Ensure the first room has only one door
+            side = random.choice(['top', 'bottom', 'left', 'right'])
+            if side in ['top', 'bottom']:
+                position = random.randint(0, SCREEN_WIDTH - self.opening_size)
+            else:
+                position = random.randint(0, SCREEN_HEIGHT - self.opening_size)
+            openings.append((side, position))
+            return openings  # Return immediately to ensure only one door
         
         while len(openings) < NUM_OPENINGS:
             side = random.choice(['top', 'bottom', 'left', 'right'])
@@ -53,8 +63,17 @@ class Room:
 
     def create_doors(self):
         doors = []
+        self.fixed_door = None
+        self.random_door = None
+    
         for side, pos in self.openings:
-            doors.append(Door(side, pos, self.opening_size+10, RED_COLOR))
+            door = Door(side, pos, self.opening_size + 10, RED_COLOR)
+            doors.append(door)
+            if self.fixed_opening and (side, pos) == self.fixed_opening:
+                self.fixed_door = door
+            else:
+                self.random_door = door
+    
         return doors
 
     def draw(self):
@@ -80,12 +99,19 @@ class Room:
             enemy.draw(self.screen)
 
         # Draw doors
-        if len(self.enemies) > 0:
-            for door in self.doors:
-                door.draw(self.screen)
-        else:
-            # Keep the fixed opening closed with red
-            if self.fixed_opening:
-                side, pos = self.fixed_opening
-                fixed_door = Door(side, pos, self.opening_size, RED_COLOR)
-                fixed_door.draw(self.screen)
+        for door in self.doors:
+            door.draw(self.screen)
+
+        # Check if all enemies are dead and open the random door
+        if not self.door_opened and all(enemy.dead for enemy in self.enemies):
+            self.open_a_door()
+            self.door_opened = True
+
+    def open_a_door(self):
+        # Ensure the fixed door remains closed
+        if self.fixed_door:
+            self.fixed_door.open = False
+        
+        # Open the random door
+        if self.random_door:
+            self.random_door.open = True

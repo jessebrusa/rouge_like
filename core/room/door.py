@@ -10,6 +10,7 @@ class Door:
         self.size = size + DOOR_EXTRA_LENGTH
         self.color = color
         self.rect = self.create_rect()
+        self.open = False
 
     def create_rect(self):
         if self.side == 'top':
@@ -22,7 +23,10 @@ class Door:
             return pygame.Rect(SCREEN_WIDTH - WALL_THICKNESS, self.pos, WALL_THICKNESS, self.size)
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
+        if not self.open:  # Only draw the door if it is not open
+            pygame.draw.rect(screen, self.color, self.rect)
 
     def check_collision(self, player_rect):
+        if self.open:
+            return False  # No collision if the door is open
         return self.rect.colliderect(player_rect)

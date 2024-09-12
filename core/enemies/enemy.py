@@ -18,9 +18,14 @@ class Enemy:
         self.rect = pygame.Rect(self.x - self.radius, self.y - self.radius, 2 * self.radius, 2 * self.radius)
         self.moving = True
         self.stuck_syringe = None  # Add this line to store the reference to the syringe
+        self.hit_count = 0 # Add this line to track the number of hits
+        self.dead = False
 
     def update(self):
         if not self.moving:
+            return
+
+        if self.dead:
             return
 
         if self.direction == "up":
@@ -49,14 +54,6 @@ class Enemy:
             self.stuck_syringe.rect = self.stuck_syringe.rotated_image.get_rect(center=(self.stuck_syringe.x, self.stuck_syringe.y))
 
     def draw(self, screen):
-        # # Draw the syringe if it is stuck to the enemy
-        # if self.stuck_syringe:
-        #     screen.blit(self.stuck_syringe.rotated_image, self.stuck_syringe.rect.topleft)
-        
-        # # Draw the enemy as a circle
-        # pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
-        # # Draw the outline of the enemy in red
-        # pygame.draw.circle(screen, RED, (self.x, self.y), self.radius, 2)
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
         if self.stuck_syringe:
             self.stuck_syringe.draw(screen)

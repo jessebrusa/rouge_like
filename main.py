@@ -70,6 +70,7 @@ def game_loop():
                 new_opening = ('top', pos)
             room_counter += 1  # Increment room counter
             room = Room(screen, room_counter, fixed_opening=new_opening)
+            player.clear_syringes()
 
         collision_handler.check_player_enemy_collision(player, room.enemies)
         collision_handler.check_syringe_enemy_collision(player.syringes, room.enemies)

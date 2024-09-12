@@ -84,3 +84,6 @@ class Player:
 
     def is_off_screen(self):
         return self.x < 0 or self.x > SCREEN_WIDTH or self.y < 0 or self.y > SCREEN_HEIGHT
+    
+    def clear_syringes(self):
+        self.syringes = []

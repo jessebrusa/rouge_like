@@ -31,10 +31,8 @@ class Syringe:
 
     def update(self):
         if self.stuck_enemy:
-            # Stick to the enemy
             self.x = self.stuck_enemy.x
             self.y = self.stuck_enemy.y
-            # self.rect = self.rotated_image.get_rect(center=(self.x, self.y))
             self.rect = None
         elif self.moving:
             if self.direction == "up":

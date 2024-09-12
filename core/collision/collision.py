@@ -74,9 +74,14 @@ class CollisionHandler:
                     if syringe.stuck_enemy:
                         continue  # Continue to check other enemies
                     
-                    print("Syringe Collision detected with enemy!")
-                    # Reduce enemy speed by 1 until it hits 0
-                    enemy.speed = max(0, enemy.speed - 1)
+                    # Increase the hit count
+                    enemy.hit_count += 1
+                    if enemy.hit_count >= 3:
+                        enemy.dead = True
+                        enemy.speed = 0  # Stop the enemy from moving
+                    else:
+                        # Reduce enemy speed by 1 until it hits 0
+                        enemy.speed = max(0, enemy.speed - 1)
 
                     # Make the syringe stick to the enemy
                     syringe.moving = False
