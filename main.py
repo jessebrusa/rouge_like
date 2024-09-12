@@ -78,6 +78,10 @@ def game_loop():
         # Draw
         room.draw()
         player.draw(screen)
+        for enemy in room.enemies:
+            enemy.draw(screen)
+        for syringe in player.syringes:
+            syringe.draw(screen)
 
         pygame.display.flip()
         clock.tick(FPS)

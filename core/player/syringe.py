@@ -13,8 +13,12 @@ class Syringe:
         self.y = y
         self.direction = direction
         self.image = pygame.image.load(SYRINGE_URL)
+        self.rotated_image = self.image
+
         self.moving = True
         self.stuck_enemy = None
+        self.relative_position = (0, 0)  # Add this line to initialize relative_position
+
         
         # Scale the image
         self.image = pygame.transform.scale(self.image, 
@@ -30,7 +34,8 @@ class Syringe:
             # Stick to the enemy
             self.x = self.stuck_enemy.x
             self.y = self.stuck_enemy.y
-            self.rect = self.rotated_image.get_rect(center=(self.x, self.y))
+            # self.rect = self.rotated_image.get_rect(center=(self.x, self.y))
+            self.rect = None
         elif self.moving:
             if self.direction == "up":
                 self.y -= self.speed
@@ -59,7 +64,11 @@ class Syringe:
         self.rect = self.rotated_image.get_rect(center=(self.x, self.y))
 
     def draw(self, screen):
-        screen.blit(self.rotated_image, self.rect.topleft)
+        if self.rect:
+            screen.blit(self.rotated_image, self.rect.topleft)
+        else:
+            # Draw the syringe at its current position if rect is None
+            screen.blit(self.rotated_image, (self.x, self.y))
 
     def swap_image(self):
         self.image = pygame.image.load(SYRINGE_PUSH_URL)

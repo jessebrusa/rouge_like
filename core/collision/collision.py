@@ -66,11 +66,13 @@ class CollisionHandler:
 
     def check_syringe_enemy_collision(self, syringes, enemies):
         for syringe in syringes:
+            if syringe.rect is None:
+                continue  # Skip syringes that are stuck to enemies
             syringe_rect = syringe.rect  # Use the rect attribute directly
             for enemy in enemies:
                 if syringe_rect.colliderect(enemy.rect):
                     if syringe.stuck_enemy:
-                        return 
+                        continue  # Continue to check other enemies
                     
                     print("Syringe Collision detected with enemy!")
                     # Reduce enemy speed by 1 until it hits 0
@@ -81,27 +83,15 @@ class CollisionHandler:
                     syringe.stuck_enemy = enemy
                     enemy.stuck_syringe = syringe  # Add this line to set the reference to the syringe in the enemy
 
-                    # Calculate the point of collision
+                    # Calculate the angle between the syringe and the enemy
                     dx = syringe.x - enemy.x
                     dy = syringe.y - enemy.y
-                    distance = math.sqrt(dx**2 + dy**2)
-                    if distance != 0:
-                        collision_x = enemy.x + (enemy.radius * dx / distance)
-                        collision_y = enemy.y + (enemy.radius * dy / distance)
-                    else:
-                        collision_x, collision_y = enemy.x, enemy.y
+                    angle = math.atan2(dy, dx)
                     
-                    # Calculate the relative position of the syringe with respect to the enemy
-                    relative_x = collision_x - enemy.x
-                    relative_y = collision_y - enemy.y
-                    
-                    # Store the relative position in the syringe
-                    syringe.relative_position = (relative_x, relative_y)
-                    
-                    # Position the syringe at the point of collision
-                    syringe.x = collision_x
-                    syringe.y = collision_y
-                    syringe.rect = syringe.rotated_image.get_rect(center=(syringe.x, syringe.y))
+                    # Position the syringe at the edge of the enemy's radius
+                    syringe.x = enemy.x + enemy.radius * math.cos(angle)
+                    syringe.y = enemy.y + enemy.radius * math.sin(angle)
+                    syringe.rect = None  # Remove the rect to prevent further collisions
 
                     syringe.swap_image()
                     
