@@ -58,7 +58,8 @@ class Room:
     def generate_enemies(self, num_enemies):
         enemies = []
         for _ in range(num_enemies):
-            enemies.append(Enemy())
+            random_speed = random.randint(1, 5)
+            enemies.append(Enemy(random_speed))
         return enemies
 
     def create_doors(self):

@@ -46,7 +46,7 @@ def game_loop():
         # Update
         player.update()
         for enemy in room.enemies:
-            enemy.update()
+            enemy.update(player)
         collision_handler.check_player_room_collision(player, room)
 
         # Check if player moves off-screen through an opening

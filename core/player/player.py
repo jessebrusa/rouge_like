@@ -8,7 +8,7 @@ from core.player.syringe import Syringe
 
 RADIUS = 20
 COLOR = GREY
-PLAYER_SPEED = 5
+PLAYER_SPEED = 6
 
 class Player:
     def __init__(self):
