@@ -22,6 +22,8 @@ class Player:
         self.last_shot_time = 0
         self.shoot_interval = 0.25
         self.syringes = []
+        self.health = 3
+        self.last_collision_time = 0
     
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)

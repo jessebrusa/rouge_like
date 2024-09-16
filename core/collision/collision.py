@@ -1,5 +1,6 @@
 import pygame
 import math
+import time
 from data.settings import *
 from core.player.player import Player
 from core.room.room import Room
@@ -58,11 +59,20 @@ class CollisionHandler:
 
 
     def check_player_enemy_collision(self, player, enemies):
+        current_time = time.time()
+        if current_time - player.last_collision_time < 1:
+            return False  # Skip collision check if 1 second has not passed
+
         player_rect = pygame.Rect(player.x - player.radius, player.y - player.radius, player.radius * 2, player.radius * 2)
         for enemy in enemies:
             if player_rect.colliderect(enemy.rect):
-                print("Player Collision detected with enemy!")
-                # Handle collision (e.g., reduce player health, remove enemy, etc.)
+                player.last_collision_time = current_time  # Update the last collision time
+                if player.health > 1:
+                    player.health -= 1
+                    print(f"Player Health: {player.health}")
+                else:
+                    return True  # Indicate that the game should end
+        return False  # Indicate that the game should continue
 
     def check_syringe_enemy_collision(self, syringes, enemies):
         for syringe in syringes:

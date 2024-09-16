@@ -28,25 +28,23 @@ def intro_screen():
         sys.exit()
 
 def game_loop():
-    running = True
-    room_counter = 1  # Initialize room counter
-
-    room = Room(screen, room_counter)
     player = Player()
-    collision_handler = CollisionHandler()  
+    room_counter = 1  # Initialize room_counter
+    room = Room(screen, room_counter)
+    collision_handler = CollisionHandler()
 
-    while running:
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()   
+                sys.exit()
 
-        screen.fill(BLACK)   
+        screen.fill(BLACK)
 
         # Update
         player.update()
         for enemy in room.enemies:
-            enemy.update(player)  # Pass the player object to the enemy update method
+            enemy.update(player)
         collision_handler.check_player_room_collision(player, room)
 
         # Check if player moves off-screen through an opening
@@ -72,7 +70,9 @@ def game_loop():
             room = Room(screen, room_counter, fixed_opening=new_opening)
             player.clear_syringes()  # Clear syringes when entering a new room
 
-        collision_handler.check_player_enemy_collision(player, room.enemies)
+        # Check for collisions
+        if collision_handler.check_player_enemy_collision(player, room.enemies):
+            return False  # End the game loop if the player's health is 1 and a collision occurs
         collision_handler.check_syringe_enemy_collision(player.syringes, room.enemies)
 
         # Draw
@@ -103,10 +103,9 @@ def main():
     while True:
         play_again = game_loop()
         if not play_again:
-            break
-        play_again = game_over()
-        if not play_again:
-            break
+            play_again = game_over()
+            if not play_again:
+                break
 
     pygame.quit()
 
