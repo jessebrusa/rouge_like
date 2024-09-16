@@ -46,7 +46,7 @@ def game_loop():
         # Update
         player.update()
         for enemy in room.enemies:
-            enemy.update(player)
+            enemy.update(player)  # Pass the player object to the enemy update method
         collision_handler.check_player_room_collision(player, room)
 
         # Check if player moves off-screen through an opening
@@ -70,12 +70,11 @@ def game_loop():
                 new_opening = ('top', pos)
             room_counter += 1  # Increment room counter
             room = Room(screen, room_counter, fixed_opening=new_opening)
-            player.clear_syringes()
+            player.clear_syringes()  # Clear syringes when entering a new room
 
         collision_handler.check_player_enemy_collision(player, room.enemies)
         collision_handler.check_syringe_enemy_collision(player.syringes, room.enemies)
 
-        
         # Draw
         room.draw()
         player.draw(screen)
@@ -86,8 +85,6 @@ def game_loop():
 
         pygame.display.flip()
         clock.tick(FPS)
-
-    return False
 
 def game_over():
     game_over_screen = GameOver(screen, clock)

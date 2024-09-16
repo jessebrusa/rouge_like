@@ -5,6 +5,7 @@ from data.settings import *
 
 RADIUS = 20
 RANDOM_RANGE = 50
+ENEMY_WAIT_TIME = .75
 
 class Enemy:
     def __init__(self, speed):
@@ -22,6 +23,7 @@ class Enemy:
         self.dead = False
         self.hit_time = None
         self.random_direction = None
+        self.spawn_time = time.time()  # Record the spawn time
 
     def update(self, player):
         if not self.moving:
@@ -31,6 +33,10 @@ class Enemy:
             return
 
         current_time = time.time()
+
+        # Wait for 2 seconds before moving
+        if current_time - self.spawn_time < ENEMY_WAIT_TIME:
+            return
 
         if self.hit_time and current_time - self.hit_time < 3:
             # Move in a random direction for 3 seconds
@@ -57,15 +63,15 @@ class Enemy:
         self.x += dx * self.speed
         self.y += dy * self.speed
 
-        # Boundary checks to keep the enemy within the screen considering WALL_THICKNESS
-        if self.x - self.radius < WALL_THICKNESS:
-            self.x = WALL_THICKNESS + self.radius
-        if self.x + self.radius > SCREEN_WIDTH - WALL_THICKNESS:
-            self.x = SCREEN_WIDTH - WALL_THICKNESS - self.radius
-        if self.y - self.radius < WALL_THICKNESS:
-            self.y = WALL_THICKNESS + self.radius
-        if self.y + self.radius > SCREEN_HEIGHT - WALL_THICKNESS:
-            self.y = SCREEN_HEIGHT - WALL_THICKNESS - self.radius
+        # Boundary checks to keep the enemy within the screen
+        if self.x - self.radius < 0:
+            self.x = self.radius
+        if self.x + self.radius > SCREEN_WIDTH:
+            self.x = SCREEN_WIDTH - self.radius
+        if self.y - self.radius < 0:
+            self.y = self.radius
+        if self.y + self.radius > SCREEN_HEIGHT:
+            self.y = SCREEN_HEIGHT - self.radius
 
         # Update the rect attribute to reflect the current position
         self.rect = pygame.Rect(self.x - self.radius, self.y - self.radius, 2 * self.radius, 2 * self.radius)
@@ -88,7 +94,6 @@ class Enemy:
             self.dead = True
         else:
             self.hit_time = time.time()  # Record the time when the enemy was hit
-
 
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
